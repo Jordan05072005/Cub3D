@@ -16,7 +16,7 @@
 
 void	fill_info(t_data *d)
 {
-	d->mdata->size_bloc[0] = d->l / max_line(d->mdata->maps);
+	d->mdata->size_bloc[0] = d->w / max_line(d->mdata->maps);
 	d->mdata->size_bloc[1] = d->h / ft_strslen(d->mdata->maps);
 	d->mdata->co[0] = d->mdata->player[0] * d->mdata->size_bloc[0];
 	d->mdata->co[1] = d->mdata->player[1] * d->mdata->size_bloc[1];

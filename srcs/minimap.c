@@ -64,37 +64,10 @@ void	draw_minmaps(t_map_data *m, t_data *d)
 	}
 }
 
-void	draw_player(t_map_data *m, t_data *d)
+void	draw_player(t_map_data *m, t_data *d, int co[2], int color)
 {
-	draw_circle(d->mlx, d->mini->win, m->old_co[0]
-		, m->old_co[1], 10,  0x000000);
-	draw_circle(d->mlx, d->mini->win, m->co[0]
-		, m->co[1], 10,  0xFFFF00);
-}
-
-//sortir de minimap
-int	move(int keycode, void *p)
-{
-	t_data *d;
-
-	d = (t_data *)p;
-	draw_projection(d, 0x000000);
-	if (keycode >= 65361 && keycode <= 65364)
-	{
-		d->mdata->old_co[0] = d->mdata->co[0];
-		d->mdata->old_co[1] = d->mdata->co[1];
-		mlx_clear_window(d->mlx, d->win);
-	}
-	if (keycode == 65362) //h
-	{
-		d->mdata->co[0] = d->mdata->co[0] + cos(d->mdata->orientation) * 10;
-		d->mdata->co[1] = d->mdata->co[1] + sin(d->mdata->orientation) * 10;
-	}
-	else if (keycode == 65361) // g
-		d->mdata->orientation -= (M_PI / 12);
-	else if (keycode == 65363) // d
-		d->mdata->orientation += (M_PI / 12);
-	d->mdata->orientation = fmod(d->mdata->orientation, 2 * M_PI);
-	draw_player(d->mdata, d);
-	draw_projection(d, 0xFF0000);
+	if (color != 0x000000)
+		draw_player(m, d, m->old_co, 0x000000);
+	draw_circle(d->mlx, d->mini->win, co[0]
+		, co[1], 10, color);
 }

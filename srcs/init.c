@@ -37,8 +37,8 @@ t_data *init_data(size_t l, size_t h)
 	d->mlx = mlx_init();
 	if (!d->mlx)
 		return (NULL);
+	d->w = l;
 	d->h = h;
-	d->l = l;
 	d->mini->win = mlx_new_window(d->mlx, l, h, "Cub3D MiniMap");
 	d->win = mlx_new_window(d->mlx, l, h, "Cub3D");
 	d->mdata = init_map_data();

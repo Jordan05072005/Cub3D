@@ -27,14 +27,14 @@ typedef struct s_map_data{
 
 typedef struct s_mini_map{
 	void	*win;
-	size_t	l;
+	size_t	w;
 	size_t	h;
 }					t_mini_map;
 
 typedef struct data{
 	void *mlx;
 	void *win;
-	size_t l;
+	size_t w;
 	size_t h;
 	t_mini_map *mini;
 	t_map_data *mdata;
@@ -64,6 +64,7 @@ int	max_line(char **maps);
 //minimap.c
 void	draw_minmaps(t_map_data *m, t_data *d);
 int	move(int keycode, void *param);
+void	draw_player(t_map_data *m, t_data *d, int co[2], int color);
 
 //projection.c
 void draw_projection(t_data *d, int color);
