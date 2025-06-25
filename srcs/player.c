@@ -12,59 +12,66 @@
 
 #include "../includes/cub3D.h"
 
-int	collision_maps(double x, double y, t_data *d)
+
+#include <sys/time.h>
+double	get_time(void)
 {
-	if (x >= d->w || x <= 0)
-		return (1);
-	if (y >= d->h || y <= 0)
-		return (1);
-	return (0);
+	struct timeval	tv;
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec + tv.tv_usec / 1000000.0);
 }
 
-int	collision_wall_now(t_data *d)
+double	adjust_x(t_map_data *m, int hitbox)
 {
-	if (d->mdata->maps[d->mdata->co[1] / d->mdata->size_bloc[1]]
-		[d->mdata->co[0] / d->mdata->size_bloc[0]] == '1')
-	{
-		draw_player(d->mdata, d, d->mdata->old_co, 0x000000);
-		return (1);
-	}
-	return (0);
+	static double	last_time = 0;
+	double	now = get_time();
+	double	delta_time = now - last_time;
+	last_time = now;
+	if (hitbox)
+		return (m->co[0]
+			+ cos(m->orientation) * (m->vel + m->hitbox));
+	return (m->co[0]
+			+ cos(m->orientation) * (m->vel));
+}
+
+double adjust_y(t_map_data *m, int hitbox)
+{
+		static double	last_time = 0;
+	double	now = get_time();
+	double	delta_time = now - last_time;
+
+	if (hitbox)
+		return (m->co[1] 
+			+ sin(m->orientation) * (m->vel + m->hitbox));
+	return (m->co[1] 
+		+ sin(m->orientation) * (m->vel));
 }
 
 int	move(int keycode, void *p)
 {
 	t_data *d;
+	t_map_data *m;
 
 	d = (t_data *)p;
-
-	ft_putstr_fd("hello", 1);
+	m = d->mdata;
 	if (keycode >= 65361 && keycode <= 65363)
 	{
 		draw_projection(d, 0x000000);
-		if (!collision_wall_now(d))
+		if (keycode == 65362 
+			&& !collision_wall(adjust_x(m, 1), adjust_y(m, 1), m, d))
 		{
-			d->mdata->old_co[0] = d->mdata->co[0];
-			d->mdata->old_co[1] = d->mdata->co[1];
-		}
-		mlx_clear_window(d->mlx, d->win);
-		if (keycode == 65362 && !collision_maps(d->mdata->co[0]
-			+ cos(d->mdata->orientation) * 10, d->mdata->co[1]
-			+ sin(d->mdata->orientation) * 10, d))
-		{
-			d->mdata->co[0] = d->mdata->co[0] + cos(d->mdata->orientation) * 10;
-			d->mdata->co[1] = d->mdata->co[1] + sin(d->mdata->orientation) * 10;
+			m->old_co[0] = m->co[0];
+			m->old_co[1] = m->co[1];
+			m->co[0] = adjust_x(m, 0);
+			m->co[1] = adjust_y(m, 0);
 		}
 		else if (keycode == 65361) // g
-			d->mdata->orientation -= (M_PI / 12);
+			m->orientation -= (M_PI / 12);
 		else if (keycode == 65363) // d
-			d->mdata->orientation += (M_PI / 12);
-		d->mdata->orientation = fmod(d->mdata->orientation, 2 * M_PI);
-		if (!collision_wall_now(d))
-		{
-			draw_player(d->mdata, d, d->mdata->co, 0xFFFF00);
-		}
+			m->orientation += (M_PI / 12);
+		m->orientation = fmod(m->orientation, 2 * M_PI);
+		draw_player(m, d, m->co, 0xFFFF00);
 		draw_projection(d, 0xFF0000);
-
+		apply_frame(d, &d->img[d->i]);
 	}
 }

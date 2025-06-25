@@ -28,6 +28,17 @@ t_map_data	*init_map_data()
 	return (data);
 }
 
+void *init_img(t_data *d)
+{
+	d->img = malloc(sizeof(t_img) * 2);
+	if (!d->img)
+		return (NULL);
+	d->img[0].img_ptr = mlx_new_image(d->mlx, d->w, d->h);
+	d->img[1].img_ptr = mlx_new_image(d->mlx, d->w, d->h);
+	d->img[0].addr = mlx_get_data_addr(d->img[0].img_ptr, &d->img[0].bpp, &d->img[0].line_len, &d->img[0].endian);
+	d->img[1].addr = mlx_get_data_addr(d->img[1].img_ptr, &d->img[1].bpp, &d->img[1].line_len, &d->img[1].endian);
+}
+
 t_data *init_data(size_t l, size_t h)
 {
 	t_data *d;
@@ -42,6 +53,8 @@ t_data *init_data(size_t l, size_t h)
 	d->mini->win = mlx_new_window(d->mlx, l, h, "Cub3D MiniMap");
 	d->win = mlx_new_window(d->mlx, l, h, "Cub3D");
 	d->mdata = init_map_data();
+	init_img(d);
+	d->i = 0;
 	return (d);
 }
 

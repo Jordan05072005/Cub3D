@@ -30,6 +30,8 @@ void	fill_info(t_data *d)
 		d->mdata->orientation = M_PI;
 	else if (d->mdata->orientation == 'N')
 		d->mdata->orientation = M_PI / 2;
+	d->mdata->vel = 10;
+	d->mdata->hitbox = 10;
 }
 
 int main(int argc, char **argv)

@@ -18,11 +18,22 @@ typedef struct s_map_data{
 	char		*tmaps;
 	char		**maps;
 	int			*player;
+	int			vel;
+	int			hitbox;
 	double	orientation;
 	size_t	size_bloc[2];
 	int			co[2];
 	int			old_co[2];
 }					t_map_data;
+
+typedef struct s_img
+{
+	void	*img_ptr;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+}	t_img;
 
 
 typedef struct s_mini_map{
@@ -34,8 +45,11 @@ typedef struct s_mini_map{
 typedef struct data{
 	void *mlx;
 	void *win;
+
 	size_t w;
 	size_t h;
+	t_img *img;
+	int		i;
 	t_mini_map *mini;
 	t_map_data *mdata;
 }				t_data;
@@ -68,6 +82,11 @@ void	draw_player(t_map_data *m, t_data *d, int co[2], int color);
 
 //projection.c
 void draw_projection(t_data *d, int color);
+int	collision_wall(double x, double y, t_map_data *m, t_data *d);
+
+//frame.c
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	apply_frame(t_data *d, t_img *i);
 
 
 

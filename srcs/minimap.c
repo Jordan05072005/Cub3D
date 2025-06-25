@@ -69,5 +69,6 @@ void	draw_player(t_map_data *m, t_data *d, int co[2], int color)
 	if (color != 0x000000)
 		draw_player(m, d, m->old_co, 0x000000);
 	draw_circle(d->mlx, d->mini->win, co[0]
-		, co[1], 10, color);
+		, co[1], m->hitbox
+		, color);
 }
