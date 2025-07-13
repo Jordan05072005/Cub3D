@@ -20,6 +20,7 @@ typedef struct s_map_data{
 	int			*player;
 	int			vel;
 	int			hitbox;
+	double	fov;
 	double	orientation;
 	size_t	size_bloc[2];
 	int			co[2];
@@ -87,6 +88,11 @@ int	collision_wall(double x, double y, t_map_data *m, t_data *d);
 //frame.c
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	apply_frame(t_data *d, t_img *i);
+
+
+//draw_groundsky.c
+void	draw_groundsky(t_data *d);
+
 
 
 

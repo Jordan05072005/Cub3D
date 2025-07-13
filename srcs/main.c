@@ -22,6 +22,7 @@ void	fill_info(t_data *d)
 	d->mdata->co[1] = d->mdata->player[1] * d->mdata->size_bloc[1];
 	d->mdata->old_co[0] = d->mdata->player[0] * d->mdata->size_bloc[0];
 	d->mdata->old_co[1] = d->mdata->player[1] * d->mdata->size_bloc[1];
+	d->mdata->fov = M_PI / 6;
 	if (d->mdata->orientation == 'W')
 		d->mdata->orientation = 0;
 	else if (d->mdata->orientation == 'S')
@@ -49,6 +50,6 @@ int main(int argc, char **argv)
 		return (error_mess("Maps incorrect"), 1);
 	fill_info(data);
 	draw_minmaps(data->mdata, data);
-	mlx_hook(data->mini->win, 2, 1L << 0, move, data);
+	mlx_hook(data->win, 2, 1L << 0, move, data);
 	mlx_loop(data->mlx);
 }

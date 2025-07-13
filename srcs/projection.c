@@ -35,35 +35,32 @@ int	collision_wall(double x, double y, t_map_data *m, t_data *d)
 	return (0);
 }
 
-void	draw_wall(t_data *d, int xy[2], double angle, double fov, int col)
+void	draw_wall(t_data *d, double xy[2], double angle, int col, int l, int color)
 {
 	double	di;
 	double	h;
 	int	y;
 
-	int	i = -1;
-
-	di = sqrt((pow(xy[0] - d->mdata->co[0], 2) + pow(xy[1] - d->mdata->co[1], 2)));
-	di *= cos(angle - d->mdata->orientation);
+	di = l * cos(angle - d->mdata->orientation);
 	if (di < 0.0001)
 		di = 0.0001;
-	h = (d->mdata->size_bloc[1] / di) * ((d->h / 4) / tan(fov));
+	h = (d->mdata->size_bloc[1] / di) * ((d->h / 4) / tan(d->mdata->fov));
 	y = (d->h / 2) - h/2 ;
 	while (++y < (d->h / 2) + h/2)
-		my_mlx_pixel_put(&d->img[d->i], col, y, 0xFF0000);
+		my_mlx_pixel_put(&d->img[d->i], col, y, color);
 }
 
 
 void draw_projection(t_data *d, int color)
 {
 	int			h;
-	int			xy[2]; // double ??
+	double	xy[2];
 	int			col;
 	double	angle;
 	double	fov;
 	double	ratio;
 
-	fov = M_PI / 6;
+	fov = d->mdata->fov;
 	col = -1;
 	while (++col < d->w)
 	{
@@ -79,6 +76,6 @@ void draw_projection(t_data *d, int color)
 			h++;
 			mlx_pixel_put(d->mlx, d->mini->win, xy[0], xy[1] , color);
 		}
-		draw_wall(d, xy, angle, fov, col);
+		draw_wall(d, xy, angle, col, h, color);
 	}
 }
