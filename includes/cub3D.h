@@ -36,6 +36,16 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
+typedef struct s_texture
+{
+	void	*img_ptr;
+	char	*addr;
+	int		width;
+	int		height;
+	int		bpp;
+	int		line_len;
+	int		endian;
+}	t_texture;
 
 typedef struct s_mini_map{
 	void	*win;
@@ -53,6 +63,7 @@ typedef struct data{
 	int		i;
 	t_mini_map *mini;
 	t_map_data *mdata;
+    t_texture	textures[4];
 }				t_data;
 
 void delstrr(char **str);
@@ -93,7 +104,9 @@ void	apply_frame(t_data *d, t_img *i);
 //draw_groundsky.c
 void	draw_groundsky(t_data *d);
 
+unsigned int	get_texture_pixel(t_texture *tex, int x, int y);
 
+void	ft_free_tab(char **tab);
 
 
 #endif

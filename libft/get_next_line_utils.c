@@ -57,30 +57,3 @@ int	in_str(char *str, char find)
 		return (i);
 	return (-1);
 }
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*dest;
-	size_t	i;
-
-	i = 0;
-	if (start >= (unsigned int)ft_strlen(s))
-	{
-		dest = malloc(sizeof(char));
-		dest[i] = '\0';
-		return (dest);
-	}
-	if (len >= ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
-	dest = malloc(sizeof(char) * (len + 1));
-	if (dest == NULL)
-		return (NULL);
-	dest[0] = '\0';
-	while (s[i + start] && i < len)
-	{
-		dest[i] = s[i + start];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}

@@ -26,3 +26,13 @@ int	max_line(char **maps)
 	}
 	return (max);
 }
+
+void	ft_free_tab(char **tab)
+{
+	int	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
+}

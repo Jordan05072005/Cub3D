@@ -14,30 +14,43 @@
 
 void delstrr(char **str)
 {
-	int	i;
+    int i;
 
-	i = -1;
-	while (str[++i])
-	{
-		free(str[i]);
-	}
-	free(str);
+    if (!str)
+        return;
+
+    i = -1;
+    while (str[++i])
+    {
+        if (str[i])
+        {
+            free(str[i]);
+            str[i] = NULL;
+        }
+    }
+    free(str);
+    str = NULL;
 }
 
 void ft_del(char **str)
 {
-	if (*str)
-	{
-		free(*str);
-	}
-	*str = NULL;
+    if (str && *str)
+    {
+        free(*str);
+        *str = NULL;
+    }
 }
 
-char	*ft_replace(char *str, char *replace)
+char *ft_replace(char *str, char *replace)
 {
-	ft_del(&str);
-	str = replace;
-	return (str);
+    if (str)
+    {
+        ft_del(&str);
+    }
+
+    str = replace;
+    return str;
 }
+
 
 //pr del all, destroy img

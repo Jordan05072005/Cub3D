@@ -1,5 +1,5 @@
 SRC = srcs/error.c srcs/free.c srcs/main.c srcs/parser.c srcs/init.c srcs/minimap.c srcs/utils.c \
-	srcs/projection.c srcs/player.c srcs/frame.c srcs/draw_groundsky.c
+	srcs/projection.c srcs/player.c srcs/frame.c srcs/draw_groundsky.c srcs/texture.c
 
 OBJ = ${SRC:.c=.o}
 
@@ -13,7 +13,7 @@ FRAMEWORK = -L$(MLX_DIR) -lmlx -Imlx -lXext -lX11 -lm -lz
 	@${CC} ${FLAGS} -c $< -o ${<:.c=.o}
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra 
 RM = rm -f
 NAME = cub3D
 

@@ -51,31 +51,89 @@ void	draw_wall(t_data *d, double xy[2], double angle, int col, int l, int color)
 }
 
 
-void draw_projection(t_data *d, int color)
+void	draw_projection(t_data *d, int color)
 {
-	int			h;
-	double	xy[2];
-	int			col;
-	double	angle;
-	double	fov;
+	int		col;
 	double	ratio;
+	double	angle;
+	double	dir_x, dir_y;
+	double	ox = d->mdata->co[0];
+	double	oy = d->mdata->co[1];
 
-	fov = d->mdata->fov;
+	double	fov = d->mdata->fov;
+	double	camera_x;
+	double	wall_x;
+	int		line_height, draw_start, draw_end;
+	double	dist;
+
 	col = -1;
-	while (++col < d->w)
+	while (++col < (int)d->w)
 	{
 		ratio = (double)col / d->w;
-		angle = d->mdata->orientation - fov + (2 * fov * ratio);
-		h = 1;
-		xy[0] = d->mdata->co[0];
-		xy[1] = d->mdata->co[1];
-		while (!collision_wall(xy[0], xy[1], d->mdata, d))
+		angle = d->mdata->orientation - fov + 2 * fov * ratio;
+		dir_x = cos(angle);
+		dir_y = sin(angle);
+
+		double ray_x = ox;
+		double ray_y = oy;
+		int step = 0;
+
+		// Ray advance until wall
+		while (!collision_wall(ray_x, ray_y, d->mdata, d))
 		{
-			xy[0] = d->mdata->co[0] + cos(angle) * h;
-			xy[1] = d->mdata->co[1] + sin(angle) * h;
-			h++;
-			mlx_pixel_put(d->mlx, d->mini->win, xy[0], xy[1] , color);
+			ray_x = ox + dir_x * step;
+			ray_y = oy + dir_y * step;
+			step++;
 		}
-		draw_wall(d, xy, angle, col, h, color);
+
+		dist = sqrt(pow(ray_x - ox, 2) + pow(ray_y - oy, 2));
+		if (dist == 0)
+			dist = 1;
+
+		// Remove fish-eye
+		dist *= cos(angle - d->mdata->orientation);
+
+		line_height = (int)(d->h / dist);
+		draw_start = -line_height / 2 + d->h / 2;
+		draw_end = line_height / 2 + d->h / 2;
+		if (draw_start < 0)
+			draw_start = 0;
+		if (draw_end >= (int)d->h)
+			draw_end = d->h - 1;
+
+		// Determine wall direction
+		int tex_index;
+		int is_vertical = fabs(ray_x - floor(ray_x + 0.5)) < fabs(ray_y - floor(ray_y + 0.5));
+
+		if (is_vertical && dir_x > 0)
+			tex_index = 3; // West
+		else if (is_vertical)
+			tex_index = 2; // East
+		else if (dir_y > 0)
+			tex_index = 0; // North
+		else
+			tex_index = 1; // South
+
+		// Wall X hit pos
+		if (is_vertical)
+			wall_x = ray_y;
+		else
+			wall_x = ray_x;
+		wall_x -= floor(wall_x);
+		int tex_x = (int)(wall_x * d->textures[tex_index].width);
+		if ((is_vertical && dir_x > 0) || (!is_vertical && dir_y < 0))
+			tex_x = d->textures[tex_index].width - tex_x - 1;
+
+		// Draw column (using while loop)
+		int y = draw_start;
+		while (y < draw_end)
+		{
+			int d_pixel = y * 256 - d->h * 128 + line_height * 128;
+			int tex_y = (d_pixel * d->textures[tex_index].height) / line_height / 256;
+			unsigned int c = get_texture_pixel(&d->textures[tex_index], tex_x, tex_y);
+			my_mlx_pixel_put(&d->img[d->i], col, y, c);
+			y++;
+		}
 	}
 }
+

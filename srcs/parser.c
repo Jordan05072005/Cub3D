@@ -83,34 +83,52 @@ int	find_player(t_map_data *m)
 	return (0);
 }
 
-int parser(char *path, t_map_data *data)
+int	parser(char *path, t_map_data *data)
 {
-	int fd;
+	int		fd;
 	char	*line;
 	char	*temp;
 	char	**temp2;
-	const char buf[1000];
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
+	if (!path || !data)
 		return (1);
-	line = get_next_line(fd);
-	while (line)
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (perror("open"), 1);
+	while ((line = get_next_line(fd)))
 	{
-		temp = ft_strtrim(line, " ");
-		if (ft_isdigit(temp[0]))
-			data->tmaps = ft_strjoinf(data->tmaps, ft_strtrim(line, "\n"));
-		else
+		printf("[parser] Ligne brute : %s", line);
+		temp = ft_strtrim(line, " \n\r\t");
+		free(line);
+		if (!temp || temp[0] == '\0') // ligne vide
 		{
-			temp2 = ft_split(temp, ' ');
-			if (temp2[0] && ft_strlen(temp2[0]) == 2)
-				fill_texture(temp2[0], temp2[1], data);
-			else if (temp2[0] && ft_strlen(temp2[0]) == 1)
-				fill_rgb(temp2[0], temp2[1], data);
+			free(temp);
+			continue;
 		}
-		ft_del(&temp);
-		line = ft_replace(line, get_next_line(fd));
+		if (ft_isdigit(temp[0]) || temp[0] == ' ') // map
+		{
+			data->tmaps = ft_strjoinf(data->tmaps, ft_strjoinf(ft_strdup(temp), ft_strdup("\r")));
+			free(temp);
+			continue;
+		}
+		printf("[parser] Ligne metadata : %s\n", temp);
+		temp2 = ft_split(temp, ' ');
+		free(temp);
+		if (!temp2 || !temp2[0] || !temp2[1])
+		{
+			printf("❌ Erreur de format dans les métadonnées.\n");
+			ft_del(temp2);
+			return (1);
+		}
+		if (ft_strlen(temp2[0]) == 2)
+			fill_texture(temp2[0], temp2[1], data);
+		else if (ft_strlen(temp2[0]) == 1)
+			fill_rgb(temp2[0], temp2[1], data);
+		ft_del(temp2);
 	}
+	close(fd);
+	if (!data->tmaps)
+		return (printf("❌ Erreur : aucune map lue.\n"), 1);
 	data->maps = ft_split(data->tmaps, '\r');
 	return (find_player(data));
 }

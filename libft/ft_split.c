@@ -3,99 +3,88 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jguaglio <guaglio.jordan@gmail.com>        +#+  +:+       +#+        */
+/*   By: pabatail <pabatail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 12:24:10 by jguaglio          #+#    #+#             */
-/*   Updated: 2024/09/10 12:24:10 by jguaglio         ###   ########.fr       */
+/*   Created: 2025/07/21 15:35:57 by pabatail          #+#    #+#             */
+/*   Updated: 2025/07/21 15:35:57 by pabatail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	if (size <= 0)
-		return (ft_strlen(src));
-	while (src[i] && i < (size - 1))
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (ft_strlen(src));
-}
-
-static int	strlen_char(char charset, char *str, int j)
+void	free_tab(char **tab)
 {
 	int	i;
 
 	i = 0;
-	while (str[i + j])
-	{
-		if (charset == str[i + j])
-			return (i);
-		i++;
-	}
-	return (i);
+	if (!tab)
+		return ;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
 }
 
-static int	ft_nbr_word(char *str, char charset)
+static int	count_words(const char *str, char c)
 {
-	int	i;
-	int	counter;
-
-	i = 0;
-	counter = 0;
-	while (str[i])
-	{
-		if ((charset != str[i]) 
-			&& (charset == str[i + 1] || str[i + 1] == '\0'))
-			counter++;
-		i++;
-	}
-	return (counter);
-}
-
-static void	free_str(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
-}
-
-char	**ft_split(char *s, char c)
-{
-	char	**str_final;
+	int		count;
 	int		i;
-	int		i_m;
 
+	count = 0;
 	i = 0;
-	i_m = 0;
-	str_final = malloc((ft_nbr_word(s, c) + 1) * sizeof(char *));
-	if (str_final == NULL)
-		return (NULL);
-	while (s[i])
+	while (str[i])
 	{
-		if (c != s[i])
-		{
-			str_final[i_m] = malloc((strlen_char(c, s, i) + 1) * sizeof(char));
-			if (str_final[i_m] == NULL)
-				return (free_str(str_final), NULL);
-			ft_strlcpy(str_final[i_m++], &s[i], strlen_char(c, s, i) + 1);
-			i += strlen_char(c, s, i);
-		}
-		else
+		while (str[i] == c)
 			i++;
+		if (str[i] != '\0')
+		{
+			count++;
+			while (str[i] != c && str[i] != '\0')
+				i++;
+		}
 	}
-	str_final[i_m] = 0;
-	return (str_final);
+	return (count);
+}
+
+static char	*get_word(const char *str, int *index, char c)
+{
+	int		start;
+	int		len;
+	char	*word;
+
+	while (str[*index] == c)
+		(*index)++;
+	start = *index;
+	while (str[*index] != c && str[*index] != '\0')
+		(*index)++;
+	len = *index - start;
+	word = ft_substr(str, start, len);
+	return (word);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**result;
+	int		words;
+	int		i;
+	int		index;
+
+	if (!s)
+		return (NULL);
+	words = count_words(s, c);
+	result = (char **)malloc(sizeof(char *) * (words + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	index = 0;
+	while (i++ < words)
+	{
+		result[i] = get_word(s, &index, c);
+		if (!result[i])
+		{
+			free_tab(result);
+			return (NULL);
+		}
+	}
+	result[i] = NULL;
+	return (result);
 }
