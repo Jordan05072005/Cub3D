@@ -36,6 +36,7 @@ void	draw_groundsky(t_data *d)
 	color_below = (d->mdata->rgbF[0] << 16) | (d->mdata->rgbF[1] << 8) | d->mdata->rgbF[2];
 	color_top = (d->mdata->rgbC[0] << 16) | (d->mdata->rgbC[1] << 8) | d->mdata->rgbC[2];
 
+	// return ;
 	y = -1;
 	top = 1;
 	while (++y < d->h)
@@ -43,10 +44,10 @@ void	draw_groundsky(t_data *d)
 		x = -1;
 		while (++x < d->w)
 		{
-			if (get_pixel_color(&d->img[d->i], x, y) != 0xFF0000 && top)
-				my_mlx_pixel_put(&d->img[d->i], x, y , color_top);
-			else if (get_pixel_color(&d->img[d->i], x, y) != 0xFF0000 && !top)
-				my_mlx_pixel_put(&d->img[d->i], x, y , color_below);
+			if (get_pixel_color(&d->img[d->i], x, y) == 0x000000 && top)
+				my_mlx_pixel_put_c(&d->img[d->i], x, y , color_top);
+			else if (get_pixel_color(&d->img[d->i], x, y) == 0x000000 && !top)
+				my_mlx_pixel_put_c(&d->img[d->i], x, y , color_below);
 			else if (y > d->h/2)
 				top = 0;
 		}

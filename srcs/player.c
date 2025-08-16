@@ -47,17 +47,16 @@ double adjust_y(t_map_data *m, int hitbox)
 		+ sin(m->orientation) * (m->vel));
 }
 
-int	move(int keycode, void *p)
+int	move(void *p)
 {
 	t_data *d;
 	t_map_data *m;
 
 	d = (t_data *)p;
 	m = d->mdata;
-	if (keycode >= 65361 && keycode <= 65363)
+	if (d->keycode >= 65361 && d->keycode <= 65363)
 	{
-		draw_projection(d, 0x000000);
-		if (keycode == 65362
+		if (d->keycode == 65362
 			&& !collision_wall(adjust_x(m, 1), adjust_y(m, 1), m, d))
 		{
 			m->old_co[0] = m->co[0];
@@ -65,10 +64,10 @@ int	move(int keycode, void *p)
 			m->co[0] = adjust_x(m, 0);
 			m->co[1] = adjust_y(m, 0);
 		}
-		else if (keycode == 65361) // g
-			m->orientation -= (M_PI / 12);
-		else if (keycode == 65363) // d
-			m->orientation += (M_PI / 12);
+		else if (d->keycode == 65361) // g
+			m->orientation -= (M_PI / 12 / 6);
+		else if (d->keycode == 65363) // d
+			m->orientation += (M_PI / 12 / 6);
 		m->orientation = fmod(m->orientation, 2 * M_PI);
 		draw_player(m, d, m->co, 0xFFFF00);
 		draw_projection(d, 0xFF0000);

@@ -43,13 +43,26 @@ typedef struct s_mini_map{
 	size_t	h;
 }					t_mini_map;
 
+typedef struct s_texture{
+	void*	texture;
+	char	*data;
+	int		bpp;
+	int		size_line;
+	int		x;
+	int		y;
+	int		w;
+	int		h;
+	int		endian;
+}				t_tex;
+
 typedef struct data{
 	void *mlx;
 	void *win;
-
+	int	keycode;
 	size_t w;
 	size_t h;
 	t_img *img;
+	t_tex	*tex;
 	int		i;
 	t_mini_map *mini;
 	t_map_data *mdata;
@@ -78,7 +91,7 @@ int	max_line(char **maps);
 
 //minimap.c
 void	draw_minmaps(t_map_data *m, t_data *d);
-int	move(int keycode, void *param);
+int	move(void *param);
 void	draw_player(t_map_data *m, t_data *d, int co[2], int color);
 
 //projection.c
@@ -86,7 +99,8 @@ void draw_projection(t_data *d, int color);
 int	collision_wall(double x, double y, t_map_data *m, t_data *d);
 
 //frame.c
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	my_mlx_pixel_put_c(t_img *img, int x, int y, int color);
+void	my_mlx_pixel_put(t_img *img, t_tex *t, int x, int y);
 void	apply_frame(t_data *d, t_img *i);
 
 

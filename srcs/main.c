@@ -22,6 +22,16 @@ void	fill_info(t_data *d)
 	d->mdata->co[1] = d->mdata->player[1] * d->mdata->size_bloc[1];
 	d->mdata->old_co[0] = d->mdata->player[0] * d->mdata->size_bloc[0];
 	d->mdata->old_co[1] = d->mdata->player[1] * d->mdata->size_bloc[1];
+	d->keycode = 0;
+
+	d->tex = malloc(sizeof(t_tex));
+	d->tex->texture = mlx_xpm_file_to_image(d->mlx, "texture.xpm", &d->tex->w, &d->tex->h);
+if (!d->tex->texture)
+    exit(write(2, "Erreur XPM\n", 11));
+// 2. Récupérer les données de la texture
+	d->tex->data = mlx_get_data_addr(d->tex->texture, &d->tex->bpp, &d->tex->size_line, &d->tex->endian);
+
+
 	d->mdata->fov = M_PI / 6;
 	if (d->mdata->orientation == 'W')
 		d->mdata->orientation = 0;
@@ -31,8 +41,26 @@ void	fill_info(t_data *d)
 		d->mdata->orientation = M_PI;
 	else if (d->mdata->orientation == 'N')
 		d->mdata->orientation = M_PI / 2;
-	d->mdata->vel = 10;
+	d->mdata->vel = 3;
 	d->mdata->hitbox = 10;
+}
+
+int	k1(int keycode, void *p)
+{
+		t_data *d;
+
+	d = (t_data *)p;
+	d->keycode  =keycode;
+	return( 2 );
+}
+
+int	k2(int keycode, void *p)
+{
+		t_data *d;
+
+	d = (t_data *)p;
+	d->keycode = 0;
+	return (1);
 }
 
 int main(int argc, char **argv)
@@ -50,6 +78,10 @@ int main(int argc, char **argv)
 		return (error_mess("Maps incorrect"), 1);
 	fill_info(data);
 	draw_minmaps(data->mdata, data);
-	mlx_hook(data->win, 2, 1L << 0, move, data);
+
+	// mlx_hook(data->win, 2, 1L << 0, move, data);
+	mlx_hook(data->win, 2, 1L << 0, k1, data);
+	mlx_hook(data->win, 3, 1L << 1, k2, data);
+	mlx_loop_hook(data->mlx, move, data);
 	mlx_loop(data->mlx);
 }

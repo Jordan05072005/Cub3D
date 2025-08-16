@@ -13,15 +13,24 @@
 #include "../includes/cub3D.h"
 
 
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
+void	my_mlx_pixel_put(t_img *img, t_tex *t, int x, int y)
+{
+	char	*dst;
+	int	color;
+
+	if (x > 800 || y > 600 || x < 0 || y < 0)
+			return ;
+	color = *(int *)(t->data + t->y * t->size_line + t->x * (t->bpp / 8));
+	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	*(unsigned int *)dst = color;
+}
+
+void	my_mlx_pixel_put_c(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
 	if (x > 800 || y > 600 || x < 0 || y < 0)
-	{
-			return ;
-	}
-
+			return;
 	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
 }
