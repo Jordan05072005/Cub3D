@@ -1,5 +1,5 @@
 SRC = srcs/error.c srcs/free.c srcs/main.c srcs/parser.c srcs/init.c srcs/minimap.c srcs/utils.c \
-	srcs/projection.c srcs/player.c srcs/frame.c srcs/draw_groundsky.c
+	srcs/projection.c srcs/brain.c srcs/frame.c srcs/draw_groundsky.c srcs/collision.c
 
 OBJ = ${SRC:.c=.o}
 

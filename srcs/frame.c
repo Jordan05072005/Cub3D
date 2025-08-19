@@ -42,6 +42,7 @@ void	clear_frame(t_img *i, t_data *d)
 
 void	apply_frame(t_data *d, t_img *i)
 {
+	ft_putchar_fd('h', 1);
 	mlx_put_image_to_window(d->mlx, d->win, i->img_ptr, 0, 0);
 	d->i = (d->i + 1) % 2;
 	clear_frame(&d->img[d->i], d);

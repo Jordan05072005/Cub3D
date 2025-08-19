@@ -12,32 +12,6 @@
 
 #include "../includes/cub3D.h"
 
-int	collision_wall(double x, double y, t_map_data *m, t_data *d)
-{
-	int	xp;
-	int	yp;
-
-	xp = x / m->size_bloc[0];
-	yp = y / m->size_bloc[1];
-	// ft_putnbr_fd(xp, 1);
-	// ft_putchar_fd('\n', 1);
-	// ft_putnbr_fd(yp, 1);
-	// ft_putchar_fd('\n', 1);
-
-	if (m->maps[yp][xp] == '1' && (xp >= (d->mdata->co[0] / m->size_bloc[0]) + 2 || 
-xp <= (d->mdata->co[0] / m->size_bloc[0]) - 2))
-		return (2);
-  if (ft_strslen(m->maps) <= yp || ft_strlen(m->maps[yp]) <= xp|| m->maps[yp][xp] == '1')
-        return 1;
-
-
-		// 		xp < 0 || yp < 0
-		// || yp >= ft_strslen(m->maps)
-		// || xp >= max_line(m->maps)
-		// || 
-	return (0);
-}
-
 void	draw_wall(t_data *d, double angle, int x, int l)
 {
 	double	di;
@@ -52,8 +26,8 @@ void	draw_wall(t_data *d, double angle, int x, int l)
 		di = 0.0001;
 	h = (d->mdata->size_bloc[1] / di) * ((d->h / 4) / tan(d->mdata->fov));
 	y = (d->h / 2) - h/2 ;
-	ft_putnbr_fd(y, 1);
-	ft_putchar_fd('\n', 1);
+	// ft_putnbr_fd(y, 1);
+	// ft_putchar_fd('\n', 1);
 	step = d->tex->h / (((d->h / 2) + h/2) - y);
 	while (++y < (d->h / 2) + h/2)
 	{
@@ -91,10 +65,11 @@ void draw_projection(t_data *d, int color)
 			mlx_pixel_put(d->mlx, d->mini->win, xy[0], xy[1] , color);
 		}
 		if (1)
-    	d->tex->x = (int)xy[1] % d->tex->w;
+    	d->tex->x = ((int)xy[1] % (d->tex->w)) * 2;
 		else
    			d->tex->x = (int)xy[0] % d->tex->w;
 		d->tex->y = 0;
-		draw_wall(d, angle, x, h);
+		if (color != 0x000000)
+			draw_wall(d, angle, x, h);
 	}
 }

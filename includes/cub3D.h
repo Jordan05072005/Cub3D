@@ -96,7 +96,10 @@ void	draw_player(t_map_data *m, t_data *d, int co[2], int color);
 
 //projection.c
 void draw_projection(t_data *d, int color);
+
+//collision.c
 int	collision_wall(double x, double y, t_map_data *m, t_data *d);
+int	collision_player(double x, double y, t_map_data *m, t_data *d);
 
 //frame.c
 void	my_mlx_pixel_put_c(t_img *img, int x, int y, int color);

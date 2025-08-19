@@ -27,9 +27,9 @@ double	adjust_x(t_map_data *m, int hitbox)
 	double	now = get_time();
 	double	delta_time = now - last_time;
 	last_time = now;
-	if (hitbox)
-		return (m->co[0]
-			+ cos(m->orientation) * (m->vel + m->hitbox));
+	// if (hitbox)
+	// 	return (m->co[0]
+	// 		+ cos(m->orientation) * (m->vel + m->hitbox));
 	return (m->co[0]
 			+ cos(m->orientation) * (m->vel));
 }
@@ -40,12 +40,13 @@ double adjust_y(t_map_data *m, int hitbox)
 	double	now = get_time();
 	double	delta_time = now - last_time;
 
-	if (hitbox)
-		return (m->co[1] 
-			+ sin(m->orientation) * (m->vel + m->hitbox));
+	// if (hitbox)
+	// 	return (m->co[1] 
+	// 		+ sin(m->orientation) * (m->vel + m->hitbox));
 	return (m->co[1] 
 		+ sin(m->orientation) * (m->vel));
 }
+
 
 int	move(void *p)
 {
@@ -56,8 +57,9 @@ int	move(void *p)
 	m = d->mdata;
 	if (d->keycode >= 65361 && d->keycode <= 65363)
 	{
+		draw_projection(d, 0x000000);
 		if (d->keycode == 65362
-			&& !collision_wall(adjust_x(m, 1), adjust_y(m, 1), m, d))
+			&& collision_player(adjust_x(m, 0), adjust_y(m, 0), m, d))
 		{
 			m->old_co[0] = m->co[0];
 			m->old_co[1] = m->co[1];
