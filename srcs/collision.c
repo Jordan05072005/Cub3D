@@ -37,17 +37,10 @@ int	collision_player(double x, double y, t_map_data *m, t_data *d)
 		//   return 1;
 	while (++i < 5)
 	{
-		ft_putnbr_fd(yp[i], 1);
-		ft_putstr_fd("\n", 1);
-		ft_putnbr_fd(xp[i], 1);
-		ft_putstr_fd("\n", 1);
-
 
 		if (m->maps[yp[i]][xp[i]] == '1')
 			return (1);
 	}
-			ft_putstr_fd("\n", 1);
-		ft_putstr_fd("\n", 1);
 }
 
 int	collision_wall(double x, double y, t_map_data *m, t_data *d)
@@ -62,6 +55,8 @@ int	collision_wall(double x, double y, t_map_data *m, t_data *d)
 	// ft_putnbr_fd(yp, 1);
 	// ft_putchar_fd('\n', 1);
 
+	if (ft_strslen(m->maps) <= yp || ft_strlen(m->maps[yp]) <= xp|| m->maps[yp][xp] == '1')
+		return 1;
 	if (m->maps[yp][xp] == '1')
 		return (2);
   if (ft_strslen(m->maps) <= yp || ft_strlen(m->maps[yp]) <= xp|| m->maps[yp][xp] == '1')

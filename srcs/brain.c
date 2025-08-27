@@ -57,7 +57,7 @@ int	move(void *p)
 	m = d->mdata;
 	if (d->keycode >= 65361 && d->keycode <= 65363)
 	{
-		draw_projection(d, 0x000000);
+		//draw_projection(d, 0x000000);
 		if (d->keycode == 65362
 			&& collision_player(adjust_x(m, 0), adjust_y(m, 0), m, d))
 		{

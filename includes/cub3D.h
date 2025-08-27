@@ -55,6 +55,17 @@ typedef struct s_texture{
 	int		endian;
 }				t_tex;
 
+ typedef struct s_casting{
+	double	angle;
+	double	r;
+	double	ray_step;
+	double	pas;
+	double	sz[2];
+	double lc[2];
+
+ }	t_casting;
+
+
 typedef struct data{
 	void *mlx;
 	void *win;
