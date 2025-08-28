@@ -18,7 +18,7 @@ typedef struct s_map_data{
 	char		*tmaps;
 	char		**maps;
 	int			*player;
-	int			vel;
+	double			vel;
 	int			hitbox;
 	double	fov;
 	double	orientation;

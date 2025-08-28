@@ -41,7 +41,7 @@ if (!d->tex->texture)
 		d->mdata->orientation = M_PI;
 	else if (d->mdata->orientation == 'N')
 		d->mdata->orientation = M_PI / 2;
-	d->mdata->vel = 3;
+	d->mdata->vel = 0.5;
 	d->mdata->hitbox = 10;
 }
 

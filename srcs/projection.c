@@ -46,26 +46,26 @@ void draw_projection(t_data *d, int color)
 	double	xy[2];
 	int			x;
 
-	c.ray_step = 0.2;
 	x = -1;
 	while (++x < d->w)
 	{
 		c.r = (double)x / d->w;
 		c.angle = d->mdata->orientation
 					- d->mdata->fov + (2 * d->mdata->fov * c.r);
-		c.pas = 0.1;
-		int	i = fmax(d->h, d->w);
-		xy[0] = d->mdata->co[0] + cos(c.angle) * i;
-		xy[1] = d->mdata->co[1] + sin(c.angle) * i--;
-		// while (collision_wall(xy[0], xy[1], d->mdata, d)) // traveaux ^piur pâs lague
-		// {
-		// 	xy[0] = d->mdata->co[0] + cos(c.angle) * i;
-		// 	xy[1] = d->mdata->co[1] + sin(c.angle) * i--;
-		// }
-		// c.pas = i;
-
-		xy[0] = d->mdata->co[0];
-		xy[1] = d->mdata->co[1];
+		c.pas = 0;
+		xy[0] = d->mdata->co[0] + cos(c.angle);
+		xy[1] = d->mdata->co[1] + sin(c.angle);
+		c.ray_step = 1;
+		while (!collision_wall(xy[0], xy[1], d->mdata, d))
+		{
+			xy[0] = d->mdata->co[0] + cos(c.angle) * c.pas;
+			xy[1] = d->mdata->co[1] + sin(c.angle) * c.pas;
+			c.pas += c.ray_step;
+		}
+		c.pas -= (c.ray_step * 2);
+		xy[0] = d->mdata->co[0] + cos(c.angle) * c.pas;
+		xy[1] = d->mdata->co[1] + sin(c.angle) * c.pas;
+		c.ray_step = 0.1;
 		while (!collision_wall(xy[0], xy[1], d->mdata, d))
 		{
 			c.pas += c.ray_step;
@@ -73,7 +73,6 @@ void draw_projection(t_data *d, int color)
 			xy[1] = d->mdata->co[1] + sin(c.angle) * c.pas;
 			//mlx_pixel_put(d->mlx, d->mini->win, xy[0], xy[1] , 0xFF0000);
 		}
-
 		c.sz[0] = d->mdata->size_bloc[0];
 		c.sz[1] = d->mdata->size_bloc[1];
 		c.lc[0] = fmod(xy[0], d->mdata->size_bloc[0]);
@@ -82,13 +81,11 @@ void draw_projection(t_data *d, int color)
 			c.lc[0] += c.sz[0];
 		if (c.lc[1] < 0.0)
 			c.lc[1] += c.sz[1];
-
 		if (fabs(c.lc[0]) < c.ray_step || fabs(c.lc[0] - c.sz[0]) < c.ray_step)
 			d->tex->x = (int)((c.lc[1] / c.sz[1]) * d->tex->w);
 		else
 			d->tex->x = (int)((c.lc[0] / c.sz[0]) * d->tex->w);
 		d->tex->y = 0;
-
 		draw_wall(d, c.angle, x, c.pas);
 	}
 }
