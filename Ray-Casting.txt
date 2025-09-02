@@ -9,7 +9,7 @@ Principe : 1.On prend un point de vision (maps 2d, angles pi/2). On tire plein d
 	C'est distant = distance * (angle - angle_player)
 	angle = angle du rayon en radiant
 	angle_player = angle de vision du joueur (en radiant)
-	2.Ensuite on applique cette formule h = (x / distance) * (h / 2 / tan(fov / 2));
+	2.Ensuite on applique cette formule h = (x / distance) * (h / 4 / tan(fov));
 		-> x = taille réel du bloc (mur) en 2
 		-> h = hauteur de l'ecran
 		->fov = champ de vision

@@ -66,7 +66,7 @@ int	move(void *p)
 			m->co[0] = adjust_x(m, 0);
 			m->co[1] = adjust_y(m, 0);
 		}
-		else if (d->keycode == 65361) // g
+		else if (d->keycode == 65361 ) // g
 			m->orientation -= (M_PI / 12 / 6);
 		else if (d->keycode == 65363) // d
 			m->orientation += (M_PI / 12 / 6);

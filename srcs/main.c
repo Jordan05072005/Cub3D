@@ -14,43 +14,12 @@
 
 #include <stdio.h>
 
-void	fill_info(t_data *d)
-{
-	d->mdata->size_bloc[0] = d->w / max_line(d->mdata->maps);
-	d->mdata->size_bloc[1] = d->h / ft_strslen(d->mdata->maps);
-	d->mdata->co[0] = d->mdata->player[0] * d->mdata->size_bloc[0];
-	d->mdata->co[1] = d->mdata->player[1] * d->mdata->size_bloc[1];
-	d->mdata->old_co[0] = d->mdata->player[0] * d->mdata->size_bloc[0];
-	d->mdata->old_co[1] = d->mdata->player[1] * d->mdata->size_bloc[1];
-	d->keycode = 0;
-
-	d->tex = malloc(sizeof(t_tex));
-	d->tex->texture = mlx_xpm_file_to_image(d->mlx, "texture.xpm", &d->tex->w, &d->tex->h);
-if (!d->tex->texture)
-    exit(write(2, "Erreur XPM\n", 11));
-// 2. Récupérer les données de la texture
-	d->tex->data = mlx_get_data_addr(d->tex->texture, &d->tex->bpp, &d->tex->size_line, &d->tex->endian);
-
-
-	d->mdata->fov = M_PI / 6;
-	if (d->mdata->orientation == 'W')
-		d->mdata->orientation = 0;
-	else if (d->mdata->orientation == 'S')
-		d->mdata->orientation = (3 * M_PI) / 2;
-	else if (d->mdata->orientation == 'O')
-		d->mdata->orientation = M_PI;
-	else if (d->mdata->orientation == 'N')
-		d->mdata->orientation = M_PI / 2;
-	d->mdata->vel = 0.5;
-	d->mdata->hitbox = 10;
-}
-
 int	k1(int keycode, void *p)
 {
 		t_data *d;
 
 	d = (t_data *)p;
-	d->keycode  =keycode;
+	d->keycode  = keycode;
 	return( 2 );
 }
 

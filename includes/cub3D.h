@@ -44,7 +44,7 @@ typedef struct s_mini_map{
 }					t_mini_map;
 
 typedef struct s_texture{
-	void*	texture;
+	void*	tex;
 	char	*data;
 	int		bpp;
 	int		size_line;
@@ -73,7 +73,7 @@ typedef struct data{
 	size_t w;
 	size_t h;
 	t_img *img;
-	t_tex	*tex;
+	t_tex	tex[4];
 	int		i;
 	t_mini_map *mini;
 	t_map_data *mdata;
@@ -117,6 +117,8 @@ void	my_mlx_pixel_put_c(t_img *img, int x, int y, int color);
 void	my_mlx_pixel_put(t_img *img, t_tex *t, int x, int y);
 void	apply_frame(t_data *d, t_img *i);
 
+//fill.c
+void	fill_info(t_data *d);
 
 //draw_groundsky.c
 void	draw_groundsky(t_data *d);
