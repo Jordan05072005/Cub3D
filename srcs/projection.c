@@ -27,7 +27,6 @@ void	draw_wall(t_data *d, double angle, int x, double l, t_tex tex)
 	h = (d->mdata->size_bloc[1] / di) * ((d->h / 4) / tan(d->mdata->fov));
 	y = (int)ceil((d->h / 2) - h/2);
 	step = tex.h / h;
-	int ty;
 	while (y < (d->h / 2) + h/2 && y < d->h)
 	{
 		my_mlx_pixel_put(&d->img[d->i], &tex, x, y);
